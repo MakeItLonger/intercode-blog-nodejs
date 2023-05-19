@@ -8,8 +8,8 @@ class PostService {
     return createdPost;
   }
 
-  async getAllPosts() {
-    const posts = await postModel.find();
+  async getAllPosts(queryParams) {
+    const posts = await postModel.find(queryParams);
 
     return posts;
   }
