@@ -4,7 +4,7 @@ import fileService from './fileService.js';
 class PostService {
   async createPost(post, picture) {
     const fileName = fileService.saveFile(picture);
-    const createdPost = await postModel.create({ ...post, picture: fileName });
+    const createdPost = await postModel.create({ ...post, picture: 'http://localhost:5000/' + fileName });
     return createdPost;
   }
 
@@ -25,12 +25,23 @@ class PostService {
     return post;
   }
 
-  async updatePost(post) {
+  async updatePost(post, picture) {
     if (!post._id) {
       throw new Error('ID is required');
     }
 
-    const updatedPost = await postModel.findByIdAndUpdate(post._id, post, { new: true });
+    let updatedPost;
+
+    if (picture) {
+      const fileName = fileService.saveFile(picture);
+      updatedPost = await postModel.findByIdAndUpdate(
+        post._id,
+        { ...post, picture: 'http://localhost:5000/' + fileName },
+        { new: true },
+      );
+    } else {
+      updatedPost = await postModel.findByIdAndUpdate(post._id, post, { new: true });
+    }
 
     return updatedPost;
   }

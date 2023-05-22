@@ -18,10 +18,6 @@ app.use(express.static('static'));
 app.use(fileUpload({}));
 app.use('/api/posts', postsRouter);
 
-// app.get('/', async (req, res) => {
-//   console.log(req.body);
-// });
-
 async function startApp() {
   try {
     await mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
