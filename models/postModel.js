@@ -4,7 +4,7 @@ const postModel = new mongoose.Schema({
   title: { type: String, required: true },
   topic: { type: String, required: true },
   content: { type: String, required: true },
-  picture: { type: String },
+  picture: { type: Array },
   date: {
     type: Date,
     default: Date.now,

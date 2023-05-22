@@ -3,8 +3,14 @@ import fileService from './fileService.js';
 
 class PostService {
   async createPost(post, picture) {
-    const fileName = fileService.saveFile(picture);
-    const createdPost = await postModel.create({ ...post, picture: 'http://localhost:5000/' + fileName });
+    const arrFilesURL = [];
+    Array.from(picture).forEach((picture) => {
+      const fileName = fileService.saveFile(picture);
+      arrFilesURL.push('http://localhost:5000/' + fileName);
+    });
+    const createdPost = await postModel.create({ ...post, picture: arrFilesURL });
+    // const fileName = fileService.saveFile(picture);
+    // const createdPost = await postModel.create({ ...post, picture: 'http://localhost:5000/' + fileName });
     return createdPost;
   }
 
@@ -33,12 +39,18 @@ class PostService {
     let updatedPost;
 
     if (picture) {
-      const fileName = fileService.saveFile(picture);
-      updatedPost = await postModel.findByIdAndUpdate(
-        post._id,
-        { ...post, picture: 'http://localhost:5000/' + fileName },
-        { new: true },
-      );
+      const arrFilesUpdateURL = [];
+      Array.from(picture).forEach((picture) => {
+        const fileName = fileService.saveFile(picture);
+        arrFilesUpdateURL.push('http://localhost:5000/' + fileName);
+      });
+      updatedPost = await postModel.findByIdAndUpdate(post._id, { ...post, picture: arrFilesUpdateURL }, { new: true });
+
+      const arrFilesURL = [];
+      Array.from(picture).forEach((picture) => {
+        const fileName = fileService.saveFile(picture);
+        arrFilesURL.push('http://localhost:5000/' + fileName);
+      });
     } else {
       updatedPost = await postModel.findByIdAndUpdate(post._id, post, { new: true });
     }
