@@ -9,8 +9,6 @@ class PostService {
       arrFilesURL.push('http://localhost:5000/' + fileName);
     });
     const createdPost = await postModel.create({ ...post, picture: arrFilesURL });
-    // const fileName = fileService.saveFile(picture);
-    // const createdPost = await postModel.create({ ...post, picture: 'http://localhost:5000/' + fileName });
     return createdPost;
   }
 
