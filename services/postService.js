@@ -13,7 +13,40 @@ class PostService {
   }
 
   async getAllPosts(queryParams) {
-    const posts = await postModel.find(queryParams);
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+
+    const page = parseInt(queryParams.page) - 1 || 0;
+    const limit = parseInt(queryParams.limit) || 6;
+    const search = queryParams.search || '';
+    const dateStart = queryParams.datestart || startOfYear;
+    const dateEnd = queryParams.dateend || String(Date.now());
+    let sort = queryParams.sort || 'title';
+    let topic = queryParams.topic || '';
+
+    const topicOptions = ['Life style', 'Home', 'Hobby', 'Travel'];
+
+    topic === '' ? (topic = [...topicOptions]) : (topic = queryParams.topic.split(','));
+    queryParams.sort ? (sort = queryParams.sort.split(',')) : (sort = [sort]);
+
+    let sortBy = {};
+    if (sort[1]) {
+      sortBy[sort[0]] = sort[1];
+    } else {
+      sortBy[sort[0]] = 'asc';
+    }
+
+    const posts = await postModel
+      .find({ title: { $regex: search, $options: 'i' } })
+      .where('topic')
+      .in([...topic])
+      .where('date')
+      .gte(dateStart)
+      .where('date')
+      .lte(dateEnd)
+      .sort(sortBy)
+      .skip(page * limit)
+      .limit(limit);
 
     return posts;
   }
