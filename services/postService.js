@@ -17,7 +17,7 @@ class PostService {
     const startOfYear = new Date(now.getFullYear(), 0, 1);
 
     const page = parseInt(queryParams.page) - 1 || 0;
-    const limit = parseInt(queryParams.limit) || 6;
+    const limit = parseInt(queryParams.limit) || 5;
     const search = queryParams.search || '';
     const dateStart = queryParams.datestart || startOfYear;
     const dateEnd = queryParams.dateend || String(Date.now());
@@ -48,7 +48,13 @@ class PostService {
       .skip(page * limit)
       .limit(limit);
 
-    return posts;
+    const total = await postModel.countDocuments({
+      title: { $regex: search, $options: 'i' },
+      topic: { $in: [...topic] },
+      date: { $gte: dateStart, $lte: dateEnd },
+    });
+
+    return { posts, total };
   }
 
   async getPost(id) {
