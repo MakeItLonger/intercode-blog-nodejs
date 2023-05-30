@@ -3,6 +3,7 @@ import fileUpload from 'express-fileupload';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import postsRouter from './routes/postsRouter.js';
+import commentsRouter from './routes/comments.Router.js';
 
 import cors from 'cors';
 
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.static('static'));
 app.use(fileUpload({}));
 app.use('/api/posts', postsRouter);
+app.use('/api/comments', commentsRouter);
 
 async function startApp() {
   try {

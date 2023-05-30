@@ -9,6 +9,7 @@ class postController {
       res.status(500).json(error);
     }
   }
+
   async getAllPosts(req, res) {
     try {
       const posts = await postService.getAllPosts(req.query);
@@ -17,6 +18,7 @@ class postController {
       res.status(500).json(error);
     }
   }
+
   async getPost(req, res) {
     try {
       const post = await postService.getPost(req.params.id);
@@ -25,6 +27,7 @@ class postController {
       res.status(500).json(error);
     }
   }
+
   async updatePost(req, res) {
     try {
       let updatedPost;
@@ -39,6 +42,7 @@ class postController {
       res.status(500).json(error);
     }
   }
+
   async deletePost(req, res) {
     try {
       const post = await postService.deletePost(req.params.id);
